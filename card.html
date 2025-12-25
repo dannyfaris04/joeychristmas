@@ -25,7 +25,6 @@
             position: relative;
         }
         
-        /* Snow Container - Fixed to cover entire screen */
         #snowflakes-container {
             position: fixed;
             top: 0;
@@ -37,7 +36,6 @@
             overflow: hidden;
         }
         
-        /* Snowflake styling with proper animation */
         .snowflake {
             position: absolute;
             color: white;
@@ -46,10 +44,9 @@
             user-select: none;
             pointer-events: none;
             z-index: 5;
-            top: -20px; /* Start above the screen */
+            top: -20px;
         }
         
-        /* Keyframe animation for falling snow */
         @keyframes snowfall {
             0% {
                 transform: translateY(-20px) translateX(0);
@@ -91,8 +88,7 @@
                 opacity: 0;
             }
         }
-        
-        /* Mobile-First Responsive CSS */
+    
         .card-container {
             width: 100%;
             max-width: 800px;
@@ -132,7 +128,6 @@
             justify-content: center;
         }
         
-        /* Front of the card - Greeting */
         .card-front {
             background: linear-gradient(to bottom right, #b91d1d, #8b0000);
             padding: 20px;
@@ -226,7 +221,6 @@
             transform: translateY(-1px);
         }
         
-        /* Back of the card - Letter */
         .card-back {
             background-color: #f9f3e9;
             transform: rotateY(180deg);
@@ -337,7 +331,6 @@
             right: 15px;
         }
         
-        /* Extra Small Phones */
         @media (max-width: 360px) {
             .card-container {
                 height: 85vh;
@@ -380,7 +373,6 @@
             }
         }
         
-        /* Small Phones */
         @media (min-width: 361px) and (max-width: 480px) {
             .christmas-title {
                 font-size: 1.9rem;
@@ -391,7 +383,6 @@
             }
         }
         
-        /* Landscape Mode */
         @media (max-height: 600px) and (orientation: landscape) {
             .card-container {
                 height: 85vh;
@@ -429,7 +420,6 @@
             }
         }
         
-        /* Tablets */
         @media (min-width: 481px) and (max-width: 768px) {
             .card-container {
                 height: 520px;
@@ -456,7 +446,6 @@
             }
         }
         
-        /* Desktop */
         @media (min-width: 769px) {
             .card-container {
                 height: 550px;
@@ -499,7 +488,6 @@
             }
         }
         
-        /* Large Desktop */
         @media (min-width: 1024px) {
             .christmas-title {
                 font-size: 3.2rem;
@@ -516,13 +504,10 @@
     </style>
 </head>
 <body>
-    <!-- Snowflakes -->
     <div id="snowflakes-container"></div>
     
-    <!-- Christmas Card -->
     <div class="card-container">
         <div class="card">
-            <!-- Front of the card - Greeting -->
             <div class="card-face card-front">
                 <div class="greeting-container">
                     <div class="christmas-icon">
@@ -536,7 +521,6 @@
                     </button>
                 </div>
                 
-                <!-- Decorative holly -->
                 <div class="decoration">
                     <div class="holly holly-left">
                         <i class="fas fa-holly-berry"></i>
@@ -547,7 +531,6 @@
                 </div>
             </div>
             
-            <!-- Back of the card - Letter -->
             <div class="card-face card-back">
                 <div class="letter-header">
                     <h2 class="letter-title">A Christmas Letter</h2>
@@ -571,7 +554,6 @@
                     </div>
                 </div>
                 
-                <!-- Decorative holly -->
                 <div class="decoration">
                     <div class="holly holly-left">
                         <i class="fas fa-holly-berry" style="color: #8b0000;"></i>
@@ -585,12 +567,9 @@
     </div>
 
     <script>
-        // Create snowflakes with proper falling animation
         function createSnowflakes() {
             const container = document.getElementById('snowflakes-container');
             const snowflakeCount = window.innerWidth < 768 ? 40 : 60;
-            
-            // Clear existing snowflakes
             container.innerHTML = '';
             
             for (let i = 0; i < snowflakeCount; i++) {
@@ -598,7 +577,6 @@
                 snowflake.classList.add('snowflake');
                 snowflake.innerHTML = '❄';
                 
-                // Random properties for each snowflake
                 const size = Math.random() * 1.2 + 0.5;
                 const startPosition = Math.random() * 100;
                 const fallDuration = Math.random() * 8 + 8;
@@ -606,16 +584,13 @@
                 const opacity = Math.random() * 0.6 + 0.3;
                 const horizontalMovement = Math.random() * 30 - 15;
                 
-                // Set snowflake styles
                 snowflake.style.left = `${startPosition}%`;
                 snowflake.style.fontSize = `${size}rem`;
                 snowflake.style.opacity = opacity;
                 snowflake.style.filter = `blur(${Math.random() * 1}px)`;
                 
-                // Create unique animation for each snowflake
                 const animationName = `snowfall-${i}`;
                 
-                // Create keyframes for this snowflake
                 const style = document.createElement('style');
                 style.textContent = `
                     @keyframes ${animationName} {
@@ -631,14 +606,12 @@
                 `;
                 document.head.appendChild(style);
                 
-                // Apply the animation
                 snowflake.style.animation = `${animationName} ${fallDuration}s linear ${fallDelay}s infinite`;
                 
                 container.appendChild(snowflake);
             }
         }
         
-        // Card flip functionality
         document.getElementById('nextBtn').addEventListener('click', function() {
             document.querySelector('.card').classList.add('flipped');
         });
@@ -647,12 +620,8 @@
             document.querySelector('.card').classList.remove('flipped');
         });
         
-        // Create snowflakes when the page loads
         window.addEventListener('load', createSnowflakes);
-        
-        // Add some interactivity to the card
         document.querySelector('.card-front').addEventListener('click', function(e) {
-            // Only trigger if not clicking the button
             if (!e.target.closest('.next-btn')) {
                 this.style.transform = 'scale(0.98)';
                 setTimeout(() => {
@@ -661,7 +630,6 @@
             }
         });
         
-        // Handle window resize
         let resizeTimeout;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
@@ -670,7 +638,6 @@
             }, 250);
         });
         
-        // Prevent zoom on double-tap
         let lastTouchEnd = 0;
         document.addEventListener('touchend', function(event) {
             const now = (new Date()).getTime();
@@ -680,9 +647,7 @@
             lastTouchEnd = now;
         }, false);
         
-        // Continuous snowfall - recreate snowflakes periodically
         setInterval(() => {
-            // Just let them fall continuously - they'll restart automatically
         }, 10000);
     </script>
 </body>
