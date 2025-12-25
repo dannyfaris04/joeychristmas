@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Christmas Wishing Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;    
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0c3b2e 0%, #1a5c3e 50%, #0c3b2e 100%);
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Snow Container - Fixed to cover entire screen */
+        #snowflakes-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+        
+        /* Snowflake styling with proper animation */
+        .snowflake {
+            position: absolute;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.8;
+            user-select: none;
+            pointer-events: none;
+            z-index: 5;
+            top: -20px; /* Start above the screen */
+        }
+        
+        /* Keyframe animation for falling snow */
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-20px) translateX(0);
+                opacity: 0.8;
+            }
+            10% {
+                transform: translateY(10vh) translateX(5px);
+                opacity: 0.9;
+            }
+            20% {
+                transform: translateY(20vh) translateX(-5px);
+            }
+            30% {
+                transform: translateY(30vh) translateX(8px);
+            }
+            40% {
+                transform: translateY(40vh) translateX(-8px);
+            }
+            50% {
+                transform: translateY(50vh) translateX(10px);
+            }
+            60% {
+                transform: translateY(60vh) translateX(-10px);
+                opacity: 0.7;
+            }
+            70% {
+                transform: translateY(70vh) translateX(7px);
+            }
+            80% {
+                transform: translateY(80vh) translateX(-7px);
+                opacity: 0.6;
+            }
+            90% {
+                transform: translateY(90vh) translateX(5px);
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Mobile-First Responsive CSS */
+        .card-container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            min-height: 500px;
+            max-height: 700px;
+            perspective: 1000px;
+            position: relative;
+            z-index: 10;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Front of the card - Greeting */
+        .card-front {
+            background: linear-gradient(to bottom right, #b91d1d, #8b0000);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ffffff" opacity="0.1" d="M50,5 L60,35 L90,35 L65,55 L75,85 L50,70 L25,85 L35,55 L10,35 L40,35 Z"/></svg>');
+            background-size: 50px;
+            opacity: 0.2;
+        }
+        
+        .greeting-container {
+            z-index: 2;
+            padding: 25px 20px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            max-width: 95%;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .christmas-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        .christmas-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #f0f0f0;
+            font-style: italic;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+        
+        .christmas-icon {
+            font-size: 3.2rem;
+            color: #FFD700;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        .next-btn {
+            background: linear-gradient(to bottom, #FFD700, #FFA500);
+            border: none;
+            border-radius: 40px;
+            padding: 14px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #8b0000;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: auto;
+            min-width: 160px;
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(to bottom, #FFE55C, #FFB347);
+        }
+        
+        .next-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Back of the card - Letter */
+        .card-back {
+            background-color: #f9f3e9;
+            transform: rotateY(180deg);
+            padding: 25px;
+            text-align: left;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .letter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #8b0000;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            background-color: #f9f3e9;
+            z-index: 1;
+        }
+        
+        .letter-title {
+            font-size: 1.5rem;
+            color: #8b0000;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+            margin-right: 10px;
+        }
+        
+        .back-btn {
+            background-color: #8b0000;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .back-btn:hover {
+            background-color: #b91d1d;
+            transform: rotate(360deg);
+        }
+        
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .letter-content {
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: #333;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        .letter-content p {
+            margin-bottom: 16px;
+            text-align: justify;
+            font-family: 'Georgia', serif;
+        }
+        
+        .letter-date {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .signature {
+            margin-top: 30px;
+            text-align: right;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.4rem;
+            color: #8b0000;
+            line-height: 1.3;
+        }
+        
+        .decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .holly {
+            position: absolute;
+            font-size: 1.3rem;
+            color: #0c3b2e;
+        }
+        
+        .holly-left {
+            top: 15px;
+            left: 15px;
+        }
+        
+        .holly-right {
+            bottom: 15px;
+            right: 15px;
+        }
+        
+        /* Extra Small Phones */
+        @media (max-width: 360px) {
+            .card-container {
+                height: 85vh;
+                min-height: 450px;
+                padding: 5px;
+            }
+            
+            .greeting-container {
+                padding: 20px 15px;
+            }
+            
+            .christmas-title {
+                font-size: 1.7rem;
+            }
+            
+            .christmas-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .christmas-icon {
+                font-size: 2.8rem;
+            }
+            
+            .next-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+                min-width: 140px;
+            }
+            
+            .card-back {
+                padding: 20px;
+            }
+            
+            .letter-title {
+                font-size: 1.3rem;
+            }
+            
+            .letter-content {
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Small Phones */
+        @media (min-width: 361px) and (max-width: 480px) {
+            .christmas-title {
+                font-size: 1.9rem;
+            }
+            
+            .christmas-subtitle {
+                font-size: 1.05rem;
+            }
+        }
+        
+        /* Landscape Mode */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .card-container {
+                height: 85vh;
+                max-height: 450px;
+                min-height: 300px;
+            }
+            
+            .greeting-container {
+                padding: 15px;
+            }
+            
+            .christmas-title {
+                font-size: 1.6rem;
+                margin-bottom: 10px;
+            }
+            
+            .christmas-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 15px;
+            }
+            
+            .christmas-icon {
+                font-size: 2.2rem;
+                margin: 10px 0;
+            }
+            
+            .next-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: 130px;
+            }
+            
+            .card-back {
+                padding: 15px;
+            }
+        }
+        
+        /* Tablets */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .card-container {
+                height: 520px;
+            }
+            
+            .christmas-title {
+                font-size: 2.5rem;
+            }
+            
+            .christmas-subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .christmas-icon {
+                font-size: 4rem;
+            }
+            
+            .letter-content {
+                font-size: 1.1rem;
+            }
+            
+            .letter-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Desktop */
+        @media (min-width: 769px) {
+            .card-container {
+                height: 550px;
+                perspective: 1500px;
+            }
+            
+            .christmas-title {
+                font-size: 3rem;
+            }
+            
+            .christmas-subtitle {
+                font-size: 1.6rem;
+            }
+            
+            .christmas-icon {
+                font-size: 4.5rem;
+            }
+            
+            .card-front, .card-back {
+                padding: 30px;
+            }
+            
+            .letter-content {
+                font-size: 1.15rem;
+            }
+            
+            .letter-title {
+                font-size: 2rem;
+            }
+            
+            .next-btn {
+                padding: 16px 40px;
+                font-size: 1.3rem;
+            }
+            
+            .back-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.4rem;
+            }
+        }
+        
+        /* Large Desktop */
+        @media (min-width: 1024px) {
+            .christmas-title {
+                font-size: 3.2rem;
+            }
+            
+            .christmas-subtitle {
+                font-size: 1.8rem;
+            }
+            
+            .christmas-icon {
+                font-size: 5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Snowflakes -->
+    <div id="snowflakes-container"></div>
+    
+    <!-- Christmas Card -->
+    <div class="card-container">
+        <div class="card">
+            <!-- Front of the card - Greeting -->
+            <div class="card-face card-front">
+                <div class="greeting-container">
+                    <div class="christmas-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h1 class="christmas-title">Merry Christmas!</h1>
+                    <h2 class="christmas-subtitle">This one specially made for Joeyy :o</h2>
+                    <button class="next-btn" id="nextBtn">
+                        <span>Open Letter</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Decorative holly -->
+                <div class="decoration">
+                    <div class="holly holly-left">
+                        <i class="fas fa-holly-berry"></i>
+                    </div>
+                    <div class="holly holly-right">
+                        <i class="fas fa-holly-berry"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back of the card - Letter -->
+            <div class="card-face card-back">
+                <div class="letter-header">
+                    <h2 class="letter-title">A Christmas Letter</h2>
+                    <button class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+                
+                <div class="letter-date">December 25th, 2025</div>
+                
+                <div class="letter-content">
+                    <p>Dear Joey,</p>
+                    
+                    <p>Wishing you a Merry Christmas!</p>
+                    <p>This year, knowing you has been one of my greatest joys. May your heart always find reasons for happiness and your spirit stay bright!</p>
+                    <p>Can't wait to share and experience more memories in the future!</p>
+                    
+                    <div class="signature">
+                        With warmest regards,<br>
+                        Danny :3
+                    </div>
+                </div>
+                
+                <!-- Decorative holly -->
+                <div class="decoration">
+                    <div class="holly holly-left">
+                        <i class="fas fa-holly-berry" style="color: #8b0000;"></i>
+                    </div>
+                    <div class="holly holly-right">
+                        <i class="fas fa-holly-berry" style="color: #8b0000;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create snowflakes with proper falling animation
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes-container');
+            const snowflakeCount = window.innerWidth < 768 ? 40 : 60;
+            
+            // Clear existing snowflakes
+            container.innerHTML = '';
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+                
+                // Random properties for each snowflake
+                const size = Math.random() * 1.2 + 0.5;
+                const startPosition = Math.random() * 100;
+                const fallDuration = Math.random() * 8 + 8;
+                const fallDelay = Math.random() * 5;
+                const opacity = Math.random() * 0.6 + 0.3;
+                const horizontalMovement = Math.random() * 30 - 15;
+                
+                // Set snowflake styles
+                snowflake.style.left = `${startPosition}%`;
+                snowflake.style.fontSize = `${size}rem`;
+                snowflake.style.opacity = opacity;
+                snowflake.style.filter = `blur(${Math.random() * 1}px)`;
+                
+                // Create unique animation for each snowflake
+                const animationName = `snowfall-${i}`;
+                
+                // Create keyframes for this snowflake
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes ${animationName} {
+                        0% {
+                            transform: translateY(-20px) translateX(0);
+                            opacity: ${opacity};
+                        }
+                        100% {
+                            transform: translateY(100vh) translateX(${horizontalMovement}px);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Apply the animation
+                snowflake.style.animation = `${animationName} ${fallDuration}s linear ${fallDelay}s infinite`;
+                
+                container.appendChild(snowflake);
+            }
+        }
+        
+        // Card flip functionality
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            document.querySelector('.card').classList.add('flipped');
+        });
+        
+        document.getElementById('backBtn').addEventListener('click', function() {
+            document.querySelector('.card').classList.remove('flipped');
+        });
+        
+        // Create snowflakes when the page loads
+        window.addEventListener('load', createSnowflakes);
+        
+        // Add some interactivity to the card
+        document.querySelector('.card-front').addEventListener('click', function(e) {
+            // Only trigger if not clicking the button
+            if (!e.target.closest('.next-btn')) {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            }
+        });
+        
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                createSnowflakes();
+            }, 250);
+        });
+        
+        // Prevent zoom on double-tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Continuous snowfall - recreate snowflakes periodically
+        setInterval(() => {
+            // Just let them fall continuously - they'll restart automatically
+        }, 10000);
+    </script>
+</body>
+</html>
